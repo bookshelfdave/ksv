@@ -103,19 +103,19 @@ func decodeCmd(c *cli.Context) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "ksv"
-	app.Usage = "decode base64-encoded YAML secrets"
+	app.Usage = "decode base64-encoded K8s YAML secrets from stdin"
 	app.Version = "0.1.0"
 	app.Commands = []cli.Command{
 		{
 			Name:    "encode",
 			Aliases: []string{"e"},
-			Usage:   "encode a secrets yaml file",
+			Usage:   "encode a secrets yaml file on stdin",
 			Action:  encodeCmd,
 		},
 		{
 			Name:    "decode",
 			Aliases: []string{"d"},
-			Usage:   "decode a secrets yaml file (default command)",
+			Usage:   "decode a secrets yaml file from stdin (default command)",
 			Action:  decodeCmd,
 			Flags: []cli.Flag{
 				cli.BoolFlag{
@@ -127,13 +127,8 @@ func main() {
 	}
 
 	// default subcommand is decode without converting stringData
-	app.Action = func(c *cli.Context) error {
-		s, err := decodeFromBase64(os.Stdin, false)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(s)
-		return nil
+	app.Action = func(c *cli.Context) {
+		decodeCmd(c)
 	}
 
 	err := app.Run(os.Args)
