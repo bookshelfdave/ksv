@@ -1,4 +1,4 @@
-# ksv
+# ksv - K8s Secrets Viewer
 
 [![Build Status](https://travis-ci.org/metadave/ksv.svg?branch=master)](https://travis-ci.org/metadave/ksv)
 
