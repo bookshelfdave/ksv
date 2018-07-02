@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var encoded_yaml_data = `
+var encodedYamlData = `
 apiVersion: v1
 kind: Secret
 metadata:
@@ -16,7 +16,7 @@ data:
   password: MWYyZDFlMmU2N2Rm
 `
 
-var decoded_yaml_data = `
+var decodedYamlData = `
 apiVersion: v1
 kind: Secret
 metadata:
@@ -28,7 +28,7 @@ data:
 `
 
 func TestEncode(t *testing.T) {
-	s, err := encodeToBase64(strings.NewReader(decoded_yaml_data))
+	s, err := encodeToBase64(strings.NewReader(decodedYamlData))
 	if err != nil {
 		t.Error("Can't parse yaml doc")
 	}
@@ -50,7 +50,7 @@ func TestEncode(t *testing.T) {
 }
 
 func TestDecode(t *testing.T) {
-	s, err := decodeFromBase64(strings.NewReader(encoded_yaml_data), false)
+	s, err := decodeFromBase64(strings.NewReader(encodedYamlData), false)
 	if err != nil {
 		t.Error("Can't parse yaml doc")
 	}
@@ -72,7 +72,7 @@ func TestDecode(t *testing.T) {
 }
 
 func TestDecodeToStringData(t *testing.T) {
-	s, err := decodeFromBase64(strings.NewReader(encoded_yaml_data), true)
+	s, err := decodeFromBase64(strings.NewReader(encodedYamlData), true)
 	if err != nil {
 		t.Error("Can't parse yaml doc")
 	}

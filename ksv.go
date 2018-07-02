@@ -41,11 +41,11 @@ func secretFromYaml(r io.Reader) (*v1secret, error) {
 }
 
 func secretToYamlString(s *v1secret) (string, error) {
-	if d, err := yaml.Marshal(&s); err != nil {
+	d, err := yaml.Marshal(&s)
+	if err != nil {
 		return "", err
-	} else {
-		return string(d), nil
 	}
+	return string(d), nil
 }
 
 func decodeFromBase64(r io.Reader, decodeToStringData bool) (*v1secret, error) {
