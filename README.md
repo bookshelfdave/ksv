@@ -1,5 +1,6 @@
 # ksv
 
+[![Build Status](https://travis-ci.org/metadave/ksv.svg?branch=master)](https://travis-ci.org/metadave/ksv)
 
  decodes/encodes entire Kubernetes secrets files
 
