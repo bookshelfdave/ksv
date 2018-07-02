@@ -30,7 +30,7 @@ or
 
 ### Convert base64-encoded secret values to use K8s `stringData`
 
-    ksv < some_secrets_file_with_base64_encoded_data_values.yaml
+    ksv -s < some_secrets_file_with_base64_encoded_data_values.yaml
 
 
 ### Base64 encoding secret values
