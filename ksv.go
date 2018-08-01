@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/base64"
 	"fmt"
 	"io"
@@ -100,6 +101,35 @@ func decodeCmd(c *cli.Context) {
 	}
 }
 
+// glued together in a hurry
+func addCmd(c *cli.Context) {
+	s, err := decodeFromBase64(os.Stdin, false)
+	if err != nil {
+		log.Fatal(err)
+	}
+	key := c.String("k")
+	value := c.String("v")
+	s.Data[key] = value
+
+	ss, err := secretToYamlString(s)
+	if err != nil {
+		log.Fatal("Can't convert back to yaml")
+	} else {
+		fmt.Println(ss)
+	}
+
+	b := bytes.NewBufferString(ss)
+	s, err = encodeToBase64(b)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if ss, err := secretToYamlString(s); err != nil {
+		log.Fatal("Can't convert back to yaml")
+	} else {
+		fmt.Println(ss)
+	}
+}
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "ksv"
@@ -121,6 +151,22 @@ func main() {
 				cli.BoolFlag{
 					Name:  "stringData, s",
 					Usage: "convert Data to StringData",
+				},
+			},
+		},
+		{
+			Name:    "add",
+			Aliases: []string{"a"},
+			Usage:   "Add a key/value to the secret data section",
+			Action:  addCmd,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "key, k",
+					Usage: "key",
+				},
+				cli.StringFlag{
+					Name:  "value, v",
+					Usage: "value",
 				},
 			},
 		},
