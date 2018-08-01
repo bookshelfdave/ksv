@@ -33,6 +33,14 @@ or
 
     ksv -s < some_secrets_file_with_base64_encoded_data_values.yaml
 
+### Add a key/value pair to a base64-encoded file
+
+     ksv add -k foo -v bar < test.yaml
+
+and test that it worked:
+
+    ksv add -k foo -v bar < test.yaml | ksv
+
 
 ### Base64 encoding secret values
 

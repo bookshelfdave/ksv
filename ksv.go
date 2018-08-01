@@ -114,8 +114,6 @@ func addCmd(c *cli.Context) {
 	ss, err := secretToYamlString(s)
 	if err != nil {
 		log.Fatal("Can't convert back to yaml")
-	} else {
-		fmt.Println(ss)
 	}
 
 	b := bytes.NewBufferString(ss)
