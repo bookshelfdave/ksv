@@ -1,13 +1,14 @@
 package main
 
 import (
-	"bytes"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/urfave/cli"
 	yaml "gopkg.in/yaml.v2"
@@ -101,31 +102,40 @@ func decodeCmd(c *cli.Context) {
 	}
 }
 
-// glued together in a hurry
-func addCmd(c *cli.Context) {
-	s, err := decodeFromBase64(os.Stdin, false)
+// added in haste :-)
+func addKey(r io.Reader, key, value string) (string, error) {
+	s, err := decodeFromBase64(r, false)
 	if err != nil {
-		log.Fatal(err)
+		return "", errors.New("Can't decode input")
 	}
-	key := c.String("k")
-	value := c.String("v")
 	s.Data[key] = value
 
 	ss, err := secretToYamlString(s)
 	if err != nil {
-		log.Fatal("Can't convert back to yaml")
+		return "", errors.New("Can't convert back to yaml")
 	}
 
-	b := bytes.NewBufferString(ss)
-	s, err = encodeToBase64(b)
+	s, err = encodeToBase64(strings.NewReader(ss))
+	if err != nil {
+		return "", errors.New("Can't encode")
+	}
+	if ss, err := secretToYamlString(s); err != nil {
+		return "", errors.New("Can't convert back to yaml")
+	} else {
+		return ss, nil
+	}
+}
+
+// glued together in a hurry
+func addCmd(c *cli.Context) {
+	key := c.String("k")
+	value := c.String("v")
+
+	s, err := addKey(os.Stdin, key, value)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if ss, err := secretToYamlString(s); err != nil {
-		log.Fatal("Can't convert back to yaml")
-	} else {
-		fmt.Println(ss)
-	}
+	fmt.Println(s)
 }
 
 func main() {

@@ -95,3 +95,20 @@ func TestDecodeToStringData(t *testing.T) {
 		t.Error("Invalid password value")
 	}
 }
+
+func TestAdd(t *testing.T) {
+
+	s, err := addKey(strings.NewReader(encodedYamlData), "foo", "bar")
+	if err != nil {
+		t.Error("Can't parse yaml doc")
+	}
+
+	sobj, err := decodeFromBase64(strings.NewReader(s), false)
+	if err != nil {
+		t.Error("Can't decode")
+	}
+	if sobj.Data["foo"] != "bar" {
+		t.Error("foo != bar")
+	}
+
+}
