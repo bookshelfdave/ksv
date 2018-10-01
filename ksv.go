@@ -17,7 +17,7 @@ import (
 type v1secret struct {
 	APIVersion string `yaml:"apiVersion"`
 	Kind       string
-	Metadata   map[string]string
+	Metadata   map[string]interface{}
 	Type       string
 	Data       map[string]string
 	StringData map[string]string
