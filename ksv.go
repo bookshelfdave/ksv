@@ -142,7 +142,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "ksv"
 	app.Usage = "decode base64-encoded K8s YAML secrets from stdin"
-	app.Version = "0.1.0"
+	app.Version = "0.4.1"
 	app.Commands = []cli.Command{
 		{
 			Name:    "encode",
