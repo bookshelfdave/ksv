@@ -94,6 +94,13 @@ func TestDecodeToStringData(t *testing.T) {
 	if s.StringData["password"] != "1f2d1e2e67df" {
 		t.Error("Invalid password value")
 	}
+	secretYaml, err := secretToYamlString(s)
+	if err != nil {
+		t.Error("Error converting secret to yaml")
+	}
+	if !strings.Contains(secretYaml, "stringData") {
+		t.Error("Doesn't contain the stringData key")
+	}
 }
 
 func TestAdd(t *testing.T) {

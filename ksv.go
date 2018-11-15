@@ -20,7 +20,7 @@ type v1secret struct {
 	Metadata   map[string]interface{}
 	Type       string
 	Data       map[string]string
-	StringData map[string]string
+	StringData map[string]string `yaml:"stringData"`
 }
 
 func readInputOrFail(r io.Reader) []byte {
