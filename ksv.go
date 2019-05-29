@@ -19,8 +19,8 @@ type v1secret struct {
 	Kind       string
 	Metadata   map[string]interface{}
 	Type       string
-	Data       map[string]string
-	StringData map[string]string `yaml:"stringData"`
+	Data       map[string]string `yaml:",omitempty"`
+	StringData map[string]string `yaml:"stringData,omitempty"`
 }
 
 func readInputOrFail(r io.Reader) []byte {
