@@ -19,8 +19,8 @@ type v1secret struct {
 	Kind       string
 	Metadata   map[string]interface{}
 	Type       string
-	Data       map[string]string
-	StringData map[string]string `yaml:"stringData"`
+	Data       map[string]string `yaml:",omitempty"`
+	StringData map[string]string `yaml:"stringData,omitempty"`
 }
 
 func readInputOrFail(r io.Reader) []byte {
@@ -50,18 +50,15 @@ func secretToYamlString(s *v1secret) (string, error) {
 	return string(d), nil
 }
 
-func decodeFromBase64(r io.Reader, decodeToStringData bool) (*v1secret, error) {
+func decodeFromBase64(r io.Reader) (*v1secret, error) {
 	s, err := secretFromYaml(r)
 	if err != nil {
 		return nil, err
 	}
 	for k, v := range s.Data {
 		decoded, _ := base64.StdEncoding.DecodeString(v)
-		s.Data[k] = string(decoded)
-		if decodeToStringData {
-			s.StringData[k] = string(decoded)
-			delete(s.Data, k)
-		}
+		s.StringData[k] = string(decoded)
+		delete(s.Data, k)
 	}
 	return s, nil
 }
@@ -91,7 +88,7 @@ func encodeCmd(c *cli.Context) {
 }
 
 func decodeCmd(c *cli.Context) {
-	s, err := decodeFromBase64(os.Stdin, c.Bool("s"))
+	s, err := decodeFromBase64(os.Stdin)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -104,7 +101,7 @@ func decodeCmd(c *cli.Context) {
 
 // added in haste :-)
 func addKey(r io.Reader, key, value string) (string, error) {
-	s, err := decodeFromBase64(r, false)
+	s, err := decodeFromBase64(r)
 	if err != nil {
 		return "", errors.New("Can't decode input")
 	}
@@ -142,7 +139,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "ksv"
 	app.Usage = "decode base64-encoded K8s YAML secrets from stdin"
-	app.Version = "0.4.1"
+	app.Version = "0.4.2"
 	app.Commands = []cli.Command{
 		{
 			Name:    "encode",
@@ -155,12 +152,6 @@ func main() {
 			Aliases: []string{"d"},
 			Usage:   "decode a secrets yaml file from stdin (default command)",
 			Action:  decodeCmd,
-			Flags: []cli.Flag{
-				cli.BoolFlag{
-					Name:  "stringData, s",
-					Usage: "convert Data to StringData",
-				},
-			},
 		},
 		{
 			Name:    "add",

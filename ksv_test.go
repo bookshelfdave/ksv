@@ -50,7 +50,7 @@ func TestEncode(t *testing.T) {
 }
 
 func TestDecode(t *testing.T) {
-	s, err := decodeFromBase64(strings.NewReader(encodedYamlData), false)
+	s, err := decodeFromBase64(strings.NewReader(encodedYamlData))
 	if err != nil {
 		t.Error("Can't parse yaml doc")
 	}
@@ -60,19 +60,16 @@ func TestDecode(t *testing.T) {
 	if s.Kind != "Secret" {
 		t.Error("Invalid Kind")
 	}
-	if s.Data["username"] != "admin" {
+	if s.StringData["username"] != "admin" {
 		t.Error("Invalid username value")
 	}
-	if s.Data["password"] != "1f2d1e2e67df" {
+	if s.StringData["password"] != "1f2d1e2e67df" {
 		t.Error("Invalid password value")
-	}
-	if len(s.StringData) != 0 {
-		t.Error("StringData should be empty")
 	}
 }
 
 func TestDecodeToStringData(t *testing.T) {
-	s, err := decodeFromBase64(strings.NewReader(encodedYamlData), true)
+	s, err := decodeFromBase64(strings.NewReader(encodedYamlData))
 	if err != nil {
 		t.Error("Can't parse yaml doc")
 	}
@@ -110,12 +107,12 @@ func TestAdd(t *testing.T) {
 		t.Error("Can't parse yaml doc")
 	}
 
-	sobj, err := decodeFromBase64(strings.NewReader(s), false)
+	sobj, err := decodeFromBase64(strings.NewReader(s))
 	if err != nil {
 		t.Error("Can't decode")
 	}
-	if sobj.Data["foo"] != "bar" {
-		t.Error("foo != bar")
+	if sobj.StringData["foo"] != "bar" {
+		t.Error(sobj.StringData["foo"] + " != bar")
 	}
 
 }
