@@ -2,19 +2,20 @@
 
 [![Build Status](https://travis-ci.org/metadave/ksv.svg?branch=master)](https://travis-ci.org/metadave/ksv)
 
- decodes/encodes entire Kubernetes secrets files
+ksv decodes/encodes entire Kubernetes secrets files
 
 
 # Installation
 
 ksv uses [dep](https://github.com/golang/dep) to manage dependencies.
 
-    go get github.com/metadave/ksv
-    cd ${GOPATH}/src/github.com/metadave/ksv
-    dep ensure
-    go install
-    # ksv will be installed in ${GOPATH}/bin
-    
+```bash
+go get github.com/metadave/ksv
+cd ${GOPATH}/src/github.com/metadave/ksv
+dep ensure
+go install
+# ksv will be installed in ${GOPATH}/bin
+```
 
 
 # Usage
